@@ -72,14 +72,14 @@ const AddProduct = () => {
     for (const file of product.productImage) {
       const formData = new FormData();
       formData.append('file', file);
-      const response = await axios.post('http://localhost:5001/api/upload', formData);
+      const response = await axios.post('http://localhost:5001/api/upload/upload', formData);
       imageUrls.push(response.data.url);
     }
     const productData = { ...product, productImage: imageUrls };
     try {
-// http://localhost:5001/api/products
-
-      const response = await axios.post('http://localhost:5001/api/add/', productData);
+// http://localhost:5001/api/products\
+// axios.get(`http://localhost:5001/api/add/products/search?query=${searchQuery}`)
+      const response = await axios.post('http://localhost:5001/api/add/create', productData);
       if (response.status === 201) {
         setProduct({
           isAvailable: true,

@@ -1,7 +1,8 @@
 const express = require('express');
-const { addProduct } = require('../controllers/productController');
+const { searchProducts, addProduct } = require('../controllers/productController');
 const router = express.Router();
 
-router.post('/', addProduct);
+router.get('/products/search', searchProducts); // Update if necessary
+router.post('/create', addProduct); // Ensure this matches frontend request
 
 module.exports = router;
