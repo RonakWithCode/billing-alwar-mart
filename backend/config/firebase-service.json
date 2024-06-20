@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "alwar-billing",
+  "private_key_id": "bd90882ce85fda14e86d69bd1b9316d2b871af60",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCVkgt4UeGDPYiU\nHwE5GOLSqAzg6mlE0+2jaimKX13/xdX0X12wMn3Zog1mmDFMYHlf1gU+Czzv/2pH\nzFYt87lQPxETbNl7FM+S2qeZi7Br8yHyrj2DXe33Uhhh1etOxz12Ruo/fVDbbOAM\nmFNt92/m+K7WJajHUs40Pd4z/pTLVm0QhIbv4Va0KBL7DxAre28jWFKlQW1fW9uE\nsSzVvgeczOX6M7Wzal8hhzll/FgUcQniHy71G3SdDZPOtfD0kBF+yj0KKkIpEmr5\n0rFfZ1dJAuEDoOk39zBxKKaq0oIDe0blOsZKiYSiGHwd7HLJjphhqJwG6COvH0Yu\nMUKcZBXXAgMBAAECggEACe0y6K3afyjOzzHNlXoC18NCc4zrJp/AFkfd8OqKZQa+\nv+SyZZa8RnzcUdJI904xz/v2xhrd1PnJFnHHyG3z/xDoc7cWKfaEHjV3yRd9wnRU\n7PPGblkGCZN/vcKCRuyvNhHXyxXoj1+G8R8M7m/tE9GuXNUMAgqLV+lBPYcoXeRJ\nCBnfes9eso16NawL9eCEv49/eBaaGJyNJ00Dnl+EyW59eHrSB2BVCKBzb8BnoGEX\nAI0xRPOdeBDDeJDpQYXXQPI1ry3j9LpJqQci1tzkiMdLprkX3dXUycwovtvtU1mO\nE9qDaKDH68qLYA2JQ5pLZhMXGWVz3I3iAaxWpV6WTQKBgQDF1tJ5BgncFXPP7nOE\nFRoXwmUM7asSf7wXGVACbSsAN+FdLuJfwyCeguNd1w6QGRRhBReTxq8mGqxl6aeT\nS/xmfKRLd9UJvQcRvUOH1wyjDkYW2c/XDnQ85FvB5Ic9iu2eXLeaPZ/KAlpwSmlt\n66RLJbcEScMtoUalSBTzmKlyNQKBgQDBipI1MKBjWK7cbDTNzl6Y2lQ88TvhYSGI\nN5NCC92uFMT9EZOFMIJ3feqSLkPWeTc0Myft7SCt/qSoNdhByx7R5W2QungdZkqY\n7lmND3oj0BkVB17pb+StPMHqCo7xSgidl1bOwNQnpykRh5dOXxqJAvDn2C+v++jm\nJCfEXSYpWwKBgBNi56EAXHr6hyy6+wrYXoQxgmFv8LGRXscMrfBu7iXJVAYjj/8+\nSbX+sXUCm+S28G5JZ3QNpiAfwQEDkm42pfcNA7R5e6DGqyir2TA4fH6F6YxXr6wt\nOGq3Hd60HCSFtp8sCrnMjBnpfR8/y3EABEtw2KxM5hlUkm2j0JnGPeR5AoGAF5xL\nB9gdyODZvCQrMOw7GBSScDjRoEYULCTzfvwpmAIKogDR6U6oq+Edi6W/Otvgwyp2\ndY0XDoLhHXAsKKKZ6Os/OYe1/YgsE4oIPLAlq1bIqIsUpg+zavrdgSq2k3L/qBH9\nUg2uFARNe0j6SWJKv2ovb2ktMB/gIqtIeqkObb8CgYAIcN+eeYg8j9XP86ZagwAu\nJTG72xfxMvOEoUpiJAIZ8ab6yB5KLYZCMwzKQ7/ZHphebu1frrhrJMEFBk7rRg5f\n+H4WKtxPGKJgTlzQDkWkUzWL2C/wRTn4uQqPIhFeHpw2j34u9zbT2rTdDMlWaeJP\nKMJtGLdXavRmIXD5SVlRFw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-reqj4@alwar-billing.iam.gserviceaccount.com",
+  "client_id": "100970088412235912518",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-reqj4%40alwar-billing.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
