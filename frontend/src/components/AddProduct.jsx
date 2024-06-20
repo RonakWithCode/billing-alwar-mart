@@ -7,6 +7,7 @@ const AddProduct = () => {
     productId: '',
     productName: '',
     productDescription: '',
+    Barcode: '',
     brand: '',
     category: '',
     subCategory: '',
@@ -22,7 +23,7 @@ const AddProduct = () => {
     productLife: '',
     productType: '',
     productIsFoodItem: '',
-    keywords: ["food", "etc","cdcd"],
+    keywords: [],
     productImage: [],
     variations: [],
   });
@@ -53,6 +54,14 @@ const AddProduct = () => {
     });
   };
 
+  const handleBarcodeKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      // Focus on the next input field if needed
+    }
+  };
+
+
   const handleImageChange = (e) => {
     setProduct({ ...product, productImage: Array.from(e.target.files) });
   };
@@ -77,6 +86,7 @@ const AddProduct = () => {
           productId: '',
           productName: '',
           productDescription: '',
+          Barcode: '',
           brand: '',
           category: '',
           subCategory: '',
@@ -165,6 +175,10 @@ const AddProduct = () => {
           <input type="text" name="productDescription" value={product.productDescription} onChange={handleChange} className="border p-2 rounded w-full" />
         </div>
         <div>
+          <label>Barcode:</label>
+          <input type="text" name="Barcode" value={product.Barcode} onChange={handleChange} onKeyPress={handleBarcodeKeyPress} className="border p-2 rounded w-full" />
+        </div>
+        <div>
           <label>Brand:</label>
           <div className="flex items-center">
             <select name="brand" value={product.brand} onChange={handleChange} className="border p-2 rounded w-full">
@@ -250,7 +264,7 @@ const AddProduct = () => {
         </div>
         <div>
           <label>Keywords:</label>
-          {/* <input type="text" name="keywords" value={product.keywords.join(', ')} onChange={(e) => setProduct({ ...product, keywords: e.target.value.split(',').map((keyword) => keyword.trim()) })} className="border p-2 rounded w-full" /> */}
+          <input type="text" name="keywords" value={product.keywords.join(', ')} onChange={(e) => setProduct({ ...product, keywords: e.target.value.split(',').map((keyword) => keyword.trim()) })} className="border p-2 rounded w-full" />
         </div>
         <div>
           <label>Product Images:</label>
