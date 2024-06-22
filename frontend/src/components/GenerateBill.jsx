@@ -21,6 +21,7 @@ const GenerateBill = () => {
 
   const [showToast, setShowToast] = useState(false);
   const [toastText, setToastText] = useState('Action in progress');
+  const [error, setError] = useState(null); // Error state
 
   const navigate = useNavigate();
 
@@ -103,6 +104,12 @@ const GenerateBill = () => {
     setToastText('Saving bill...');
     setShowToast(true);
 
+    if (billItems.length < 1) {
+      setError('No items to save');
+      setShowToast(false);
+      return;
+    }
+
     const billNumber = `BILL-${Date.now()}`;
     // Prepare bill data
     const billData = {
@@ -130,19 +137,24 @@ const GenerateBill = () => {
       if (response.status === 201) {
         closeConfirmPrintModal();
         setShowToast(false);
+        setError(null);
       }
-
     } catch (error) {
       setToastText('Failed to save bill');
-      setShowToast(true);
+      setShowToast(false);
+      setError(error.message); // Update to set the error message
       console.error('Error saving bill:', error);
-      alert('Failed to save bill');
     }
   };
 
   const handleSaveAndPrint = async () => {
     setToastText('Saving and printing bill...');
     setShowToast(true);
+    if (billItems.length < 1) {
+      setError('No items to save');
+      setShowToast(false);
+      return;
+    }
 
     const billNumber = `BILL-${Date.now()}`;
     const billData = {
@@ -169,14 +181,14 @@ const GenerateBill = () => {
       if (response.status === 201) {
         closeConfirmPrintModal();
         setShowToast(false);
+        setError(null);
         window.print();
       }
-
     } catch (error) {
       setToastText('Failed to save bill');
-      setShowToast(true);
+      setShowToast(false);
+      setError(error.message); // Update to set the error message
       console.error('Error saving bill:', error);
-      alert('Failed to save bill');
     }
   };
 
@@ -188,11 +200,21 @@ const GenerateBill = () => {
     }, 0);
   };
 
+  const closeErrorAlert = () => {
+    setError(null);
+  };
+
   return (
     <div className="container mx-auto p-4">
       <Toast show={showToast} text={toastText} />
 
       <h1 className="text-2xl font-bold mb-4">Generate Bill</h1>
+      {error && (
+        <div className="mt-2 bg-red-500 text-sm text-white rounded-lg p-4 flex justify-between items-center" role="alert">
+          <span><span className="font-bold">Error:</span> {error}</span>
+          <button onClick={closeErrorAlert} className="text-white ml-4">✖</button>
+        </div>
+      )}
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
           <label>Customer Name:</label>
