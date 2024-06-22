@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import useEscapeKey from './useEscapeKey';
 
 const SearchModal = ({ onClose, onSelect }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+
+
+  // useEscapeKey(onClose);
+
 
   useEffect(() => {
     if (searchQuery) {

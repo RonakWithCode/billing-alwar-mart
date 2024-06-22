@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
+import useEscapeKey from './useEscapeKey';
 
 const EditProductModal = ({ product, onClose, onSave }) => {
   const [updatedProduct, setUpdatedProduct] = useState({ ...product });
+
+  // useEscapeKey(onClose);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
