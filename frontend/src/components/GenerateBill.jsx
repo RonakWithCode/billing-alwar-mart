@@ -1,18 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import SearchModal from './SearchModal';
 import EditProductModal from './EditProductModal';
+import QuickAddProduct from './QuickAddProduct';
+import ConfirmPrintModal from './ConfirmPrintModal';
+import Toast from './Toasts/Toast'; // Import the Toast component
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const GenerateBill = () => {
   const [billItems, setBillItems] = useState([]);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [isEditProductModalOpen, setIsEditProductModalOpen] = useState(false);
+  const [isQuickAddModalOpen, setIsQuickAddModalOpen] = useState(false);
+  const [isConfirmPrintModalOpen, setIsConfirmPrintModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [customerDetails, setCustomerDetails] = useState({
-    name: '',
-    phone: '',
-    address: ''
-  });
+  const [customerName, setCustomerName] = useState('');
+  const [customerPhone, setCustomerPhone] = useState('');
+  const [customerAddress, setCustomerAddress] = useState('');
+  const [billDate, setBillDate] = useState(new Date().toISOString().substring(0, 10));
+
+  const [showToast, setShowToast] = useState(false);
+  const [toastText, setToastText] = useState('Action in progress');
 
   const navigate = useNavigate();
 
@@ -23,9 +31,27 @@ const GenerateBill = () => {
           closeSearchModal();
         } else if (isEditProductModalOpen) {
           closeEditProductModal();
+        } else if (isQuickAddModalOpen) {
+          closeQuickAddModal();
+        } else if (isConfirmPrintModalOpen) {
+          closeConfirmPrintModal();
         } else {
           navigate('/');
         }
+      }
+
+      // Prevent default behavior for specific key combinations
+      if ((e.ctrlKey && e.key === 'r') || (e.ctrlKey && e.key === 'R')) {
+        e.preventDefault();
+        // Custom action for Ctrl+R
+      } else if ((e.ctrlKey && e.key === 's') || (e.ctrlKey && e.key === 'S')) {
+        e.preventDefault();
+        // Custom action for Ctrl+S
+        save();
+      } else if ((e.ctrlKey && e.key === 'p') || (e.ctrlKey && e.key === 'P')) {
+        e.preventDefault();
+        // Custom action for Ctrl+P
+        handleSaveAndPrint();
       }
     };
 
@@ -34,12 +60,7 @@ const GenerateBill = () => {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [navigate, isSearchModalOpen, isEditProductModalOpen]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setCustomerDetails({ ...customerDetails, [name]: value });
-  };
+  }, [navigate, isSearchModalOpen, isEditProductModalOpen, isQuickAddModalOpen, isConfirmPrintModalOpen]);
 
   const openSearchModal = () => setIsSearchModalOpen(true);
   const closeSearchModal = () => setIsSearchModalOpen(false);
@@ -50,6 +71,12 @@ const GenerateBill = () => {
   };
 
   const closeEditProductModal = () => setIsEditProductModalOpen(false);
+
+  const openQuickAddModal = () => setIsQuickAddModalOpen(true);
+  const closeQuickAddModal = () => setIsQuickAddModalOpen(false);
+
+  const openConfirmPrintModal = () => setIsConfirmPrintModalOpen(true);
+  const closeConfirmPrintModal = () => setIsConfirmPrintModalOpen(false);
 
   const addToBill = (product) => {
     const existingProduct = billItems.find(item => item.productId === product.productId);
@@ -72,8 +99,85 @@ const GenerateBill = () => {
     setBillItems(updatedBillItems);
   };
 
-  const handlePrint = () => {
-    window.print();
+  const save = async () => {
+    setToastText('Saving bill...');
+    setShowToast(true);
+
+    const billNumber = `BILL-${Date.now()}`;
+    // Prepare bill data
+    const billData = {
+      billNumber,
+      date: billDate,
+      customerName,
+      customerPhone,
+      customerAddress,
+      items: billItems.map(item => ({
+        productId: item.productId,
+        productName: item.productName,
+        weight: item.weight,
+        weightSIUnit: item.weightSIUnit,
+        quantity: item.minSelectableQuantity,
+        price: item.price,
+        discount: item.discount,
+        totalPrice: item.minSelectableQuantity * item.price - (item.discount / 100) * (item.minSelectableQuantity * item.price),
+      })),
+      totalPrice: calculateTotalPrice(),
+    };
+
+    try {
+      // Save bill to backend
+      const response = await axios.post('http://localhost:5001/api/bills', billData);
+      if (response.status === 201) {
+        closeConfirmPrintModal();
+        setShowToast(false);
+      }
+
+    } catch (error) {
+      setToastText('Failed to save bill');
+      setShowToast(true);
+      console.error('Error saving bill:', error);
+      alert('Failed to save bill');
+    }
+  };
+
+  const handleSaveAndPrint = async () => {
+    setToastText('Saving and printing bill...');
+    setShowToast(true);
+
+    const billNumber = `BILL-${Date.now()}`;
+    const billData = {
+      billNumber,
+      date: billDate,
+      customerName,
+      customerPhone,
+      customerAddress,
+      items: billItems.map(item => ({
+        productId: item.productId,
+        productName: item.productName,
+        weight: item.weight,
+        weightSIUnit: item.weightSIUnit,
+        quantity: item.minSelectableQuantity,
+        price: item.price,
+        discount: item.discount,
+        totalPrice: item.minSelectableQuantity * item.price - (item.discount / 100) * (item.minSelectableQuantity * item.price),
+      })),
+      totalPrice: calculateTotalPrice(),
+    };
+
+    try {
+      const response = await axios.post('http://localhost:5001/api/bills', billData);
+      if (response.status === 201) {
+        closeConfirmPrintModal();
+        setShowToast(false);
+        window.print();
+      }
+
+    } catch (error) {
+      setToastText('Failed to save bill');
+      setShowToast(true);
+      console.error('Error saving bill:', error);
+      alert('Failed to save bill');
+    }
   };
 
   const calculateTotalPrice = () => {
@@ -86,44 +190,51 @@ const GenerateBill = () => {
 
   return (
     <div className="container mx-auto p-4">
+      <Toast show={showToast} text={toastText} />
+
       <h1 className="text-2xl font-bold mb-4">Generate Bill</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+      <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
-          <label className="block text-gray-700 text-sm font-bold mb-2">Customer Name (Optional):</label>
+          <label>Customer Name:</label>
           <input
             type="text"
-            name="name"
-            value={customerDetails.name}
-            onChange={handleInputChange}
+            value={customerName}
+            onChange={(e) => setCustomerName(e.target.value)}
             className="border p-2 rounded w-full"
-            placeholder="Enter customer name"
           />
         </div>
         <div>
-          <label className="block text-gray-700 text-sm font-bold mb-2">Phone Number (Optional):</label>
+          <label>Phone Number:</label>
           <input
             type="tel"
-            name="phone"
-            value={customerDetails.phone}
-            onChange={handleInputChange}
-            className="border p-2 rounded w-full"
-            placeholder="Enter phone number"
             maxLength={10}
+            value={customerPhone}
+            onChange={(e) => setCustomerPhone(e.target.value)}
+            className="border p-2 rounded w-full"
+          />
+        </div>
+        <div>
+          <label>Address:</label>
+          <input
+            type="text"
+            value={customerAddress}
+            onChange={(e) => setCustomerAddress(e.target.value)}
+            className="border p-2 rounded w-full"
+          />
+        </div>
+        <div>
+          <label>Bill Date:</label>
+          <input
+            type="date"
+            value={billDate}
+            onChange={(e) => setBillDate(e.target.value)}
+            className="border p-2 rounded w-full"
           />
         </div>
       </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Address (Optional):</label>
-        <input
-          type="text"
-          name="address"
-          value={customerDetails.address}
-          onChange={handleInputChange}
-          className="border p-2 rounded w-full"
-          placeholder="Enter address"
-        />
-      </div>
+
       <button onClick={openSearchModal} className="bg-blue-500 text-white px-4 py-2 rounded mb-4">Search Products</button>
+      <button onClick={openQuickAddModal} className="bg-green-500 text-white px-4 py-2 rounded mb-4">Quick Add Product</button>
 
       <table className="table-auto w-full mb-4">
         <thead>
@@ -133,7 +244,7 @@ const GenerateBill = () => {
             <th className="px-4 py-2">Quantity</th>
             <th className="px-4 py-2">Price</th>
             <th className="px-4 py-2">Discount</th>
-            <th className="px-4 py-2">Total Price</th>
+            <th className="px-4 py-2">Total price</th>
             <th className="px-4 py-2">Actions</th>
             <th className="px-4 py-2">Delete</th>
           </tr>
@@ -162,10 +273,18 @@ const GenerateBill = () => {
         Total Price: ₹{calculateTotalPrice().toFixed(2)}
       </div>
 
-      <button onClick={handlePrint} className="bg-green-500 text-white px-4 py-2 rounded">Print Bill</button>
+      <button onClick={openConfirmPrintModal} className="bg-green-500 text-white px-4 py-2 rounded">Print Bill</button>
 
       {isSearchModalOpen && <SearchModal onClose={closeSearchModal} onSelect={addToBill} />}
       {isEditProductModalOpen && <EditProductModal product={selectedProduct} onClose={closeEditProductModal} onSave={saveProduct} />}
+      {isQuickAddModalOpen && <QuickAddProduct onClose={closeQuickAddModal} />}
+      {isConfirmPrintModalOpen && (
+        <ConfirmPrintModal
+          onClose={closeConfirmPrintModal}
+          onSave={save}
+          onSaveAndPrint={handleSaveAndPrint}
+        />
+      )}
     </div>
   );
 };

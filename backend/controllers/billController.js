@@ -1,22 +1,16 @@
-const Bill = require('../models/billModel');
+const mongoose = require('mongoose');
+const Bill = require('../models/billModel'); // Assume you have created a Bill model
 
-const generateBill = async (req, res) => {
+const saveBill = async (req, res) => {
+  const billData = req.body;
+
   try {
-    const bill = new Bill(req.body);
+    const bill = new Bill(billData);
     await bill.save();
     res.status(201).json(bill);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: 'Failed to save bill', error });
   }
 };
 
-const getBills = async (req, res) => {
-  try {
-    const bills = await Bill.find({}).populate('products');
-    res.status(200).json(bills);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
-module.exports = { generateBill, getBills };
+module.exports = { saveBill };

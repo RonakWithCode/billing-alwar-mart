@@ -6,7 +6,9 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const brandRoutes = require('./routes/brandRoutes');
 const subCategoryRoutes = require('./routes/subCategoryRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
-const productRoutes = require('./routes/productRoutes');  // Add this line
+const productRoutes = require('./routes/productRoutes');
+const billRoutes = require('./routes/billRoutes');
+const quickProductRoutes = require('./routes/quickProductRoutes'); // Add this line
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -22,9 +24,10 @@ mongoose.connect('mongodb://localhost:27017/AlwarMart', {
 app.use('/api/categories', categoryRoutes);
 app.use('/api/brands', brandRoutes);
 app.use('/api/subcategories', subCategoryRoutes);
-app.use('/api/upload', uploadRoutes); // Ensure this matches the route
-app.use('/api/add', productRoutes);  // Add this line
-// const response = await axios.post('http://localhost:5001/api/add/products', productData);
+app.use('/api/upload', uploadRoutes);
+app.use('/api/add', productRoutes);
+app.use('/api', billRoutes);
+app.use('/api', quickProductRoutes); // Add this line
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
