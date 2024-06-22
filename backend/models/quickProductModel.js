@@ -6,8 +6,9 @@ const quickProductSchema = new mongoose.Schema({
   productPrice: { type: Number, required: true },
   productBarcode: { type: String, required: true },
   brandName: { type: String },
-  weight: { type: Number, required: true }, // Add this line
-  weightSIUnit: { type: String, required: true } // Add this line
+  weight: { type: Number, required: true },
+  weightSIUnit: { type: String, required: true },
+  minSelectableQuantity: { type: Number, required: true } // Add this line
 });
 
 module.exports = mongoose.model('QuickProduct', quickProductSchema);

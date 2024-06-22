@@ -8,6 +8,9 @@ const HomePage = () => {
       <nav>
         <ul>
           <li>
+            <Link to="/quick" className="text-blue-500">Add quick Product</Link>
+          </li>
+          <li>
             <Link to="/add-product" className="text-blue-500">Add Product</Link>
           </li>
           <li>

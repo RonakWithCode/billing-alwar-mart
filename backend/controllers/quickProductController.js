@@ -1,7 +1,12 @@
 const QuickProduct = require('../models/quickProductModel');
 
 const addQuickProduct = async (req, res) => {
-  const { productName, productMRP, productPrice, productBarcode, brandName, weight, weightSIUnit } = req.body;
+  const { productName, productMRP, productPrice, productBarcode, brandName, weight, weightSIUnit, minSelectableQuantity } = req.body;
+
+  // Validate input data
+  if (!productName || !productMRP || !productPrice || !productBarcode || !weight || !weightSIUnit || minSelectableQuantity == null) {
+    return res.status(400).json({ message: 'All fields are required except brandName' });
+  }
 
   const newQuickProduct = new QuickProduct({
     productName,
@@ -10,7 +15,8 @@ const addQuickProduct = async (req, res) => {
     productBarcode,
     brandName,
     weight,
-    weightSIUnit
+    weightSIUnit,
+    minSelectableQuantity // Add this line
   });
 
   try {
@@ -36,4 +42,41 @@ const searchQuickProducts = async (req, res) => {
   }
 };
 
-module.exports = { addQuickProduct, searchQuickProducts };
+const updateQuickProduct = async (req, res) => {
+  const { id } = req.params;
+  const updates = req.body;
+
+  try {
+    const updatedProduct = await QuickProduct.findByIdAndUpdate(id, updates, { new: true });
+    res.json(updatedProduct);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const getQuickProductById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const product = await QuickProduct.findById(id);
+    res.json(product);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const deleteQuickProduct = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedProduct = await QuickProduct.findByIdAndDelete(id);
+    if (!deletedProduct) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    res.json({ message: 'Product deleted successfully' });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+module.exports = { addQuickProduct, searchQuickProducts, updateQuickProduct, getQuickProductById, deleteQuickProduct };

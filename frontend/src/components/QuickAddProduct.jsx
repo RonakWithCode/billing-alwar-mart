@@ -7,8 +7,9 @@ const QuickAddProduct = ({ onClose }) => {
   const [productPrice, setProductPrice] = useState('');
   const [productBarcode, setProductBarcode] = useState('');
   const [brandName, setBrandName] = useState('');
-  const [weight, setWeight] = useState(''); // Add this line
-  const [weightSIUnit, setWeightSIUnit] = useState(''); // Add this line
+  const [weight, setWeight] = useState('');
+  const [weightSIUnit, setWeightSIUnit] = useState('');
+  const [minSelectableQuantity, setMinSelectableQuantity] = useState(''); // Add this line
 
   const handleAddProduct = async () => {
     const productData = {
@@ -17,12 +18,14 @@ const QuickAddProduct = ({ onClose }) => {
       productPrice,
       productBarcode,
       brandName,
-      weight, // Add this line
-      weightSIUnit // Add this line
+      weight,
+      weightSIUnit,
+      minSelectableQuantity // Add this line
     };
 
     try {
-      const response = await axios.post('http://localhost:5001/api/quick-products', productData);
+      await axios.post('http://localhost:5001/api/quick-products', productData);
+      // const response = await axios.post('http://localhost:5001/api/quick-products', productData);
       onClose();
     } catch (error) {
       console.error('Error adding product:', error);
@@ -98,6 +101,15 @@ const QuickAddProduct = ({ onClose }) => {
               className="border p-2 rounded w-full"
             />
           </div>
+          <div>
+            <label>Min. Selectable Quantity:</label>
+            <input
+              type="number"
+              value={minSelectableQuantity}
+              onChange={(e) => setMinSelectableQuantity(e.target.value)}
+              className="border p-2 rounded w-full"
+            />
+          </div>
         </div>
         <div className="flex justify-end space-x-4">
           <button onClick={onClose} className="p-2 bg-gray-500 text-white rounded">Cancel</button>
@@ -109,3 +121,8 @@ const QuickAddProduct = ({ onClose }) => {
 };
 
 export default QuickAddProduct;
+
+
+
+
+

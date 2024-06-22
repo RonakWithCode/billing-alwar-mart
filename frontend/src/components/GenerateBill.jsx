@@ -150,12 +150,8 @@ const GenerateBill = () => {
   const handleSaveAndPrint = async () => {
     setToastText('Saving and printing bill...');
     setShowToast(true);
-    if (billItems.length < 1) {
-      setError('No items to save');
-      setShowToast(false);
-      return;
-    }
 
+    
     const billNumber = `BILL-${Date.now()}`;
     const billData = {
       billNumber,
@@ -284,7 +280,7 @@ const GenerateBill = () => {
                 <button onClick={() => openEditProductModal(item)} className="bg-yellow-500 text-white px-2 py-1 rounded">Edit</button>
               </td>
               <td className="border px-4 py-2">
-                <button onClick={() => deleteProduct(item.productId)} className="bg-red-500 text-white px-2 py-1 rounded">❌</button>
+                <button onClick={() => deleteProduct(item.productId)} className=" text-white px-2 py-1 rounded">❌</button>
               </td>
             </tr>
           ))}

@@ -8,7 +8,7 @@ const subCategoryRoutes = require('./routes/subCategoryRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const productRoutes = require('./routes/productRoutes');
 const billRoutes = require('./routes/billRoutes');
-const quickProductRoutes = require('./routes/quickProductRoutes'); // Add this line
+const quickProductRoutes = require('./routes/quickProductRoutes');
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -27,7 +27,7 @@ app.use('/api/subcategories', subCategoryRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/add', productRoutes);
 app.use('/api', billRoutes);
-app.use('/api', quickProductRoutes); // Add this line
+app.use('/api', quickProductRoutes);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
