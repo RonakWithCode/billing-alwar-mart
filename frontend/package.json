@@ -12,6 +12,7 @@
   "dependencies": {
     "@zxing/library": "^0.21.1",
     "axios": "^1.7.2",
+    "jspdf": "^2.5.1",
     "npm": "^10.8.1",
     "react": "^18.2.0",
     "react-barcode-reader": "^0.0.2",

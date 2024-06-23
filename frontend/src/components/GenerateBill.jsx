@@ -6,6 +6,7 @@ import ConfirmPrintModal from './ConfirmPrintModal';
 import Toast from './Toasts/Toast'; // Import the Toast component
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { generatePDF } from './GeneratePDFInvoice'; // Adjust the path as necessary
 
 const GenerateBill = () => {
   const [billItems, setBillItems] = useState([]);
@@ -146,59 +147,84 @@ const GenerateBill = () => {
     }
   };
 
-
   const handleSaveAndPrint = async () => {
-    setToastText('Saving and printing bill...');
-    setShowToast(true);
-  
-    const billNumber = `BILL-${Date.now()}`;
     const billData = {
-      billNumber,
-      date: billDate,
-      customerName,
-      customerPhone,
-      customerAddress,
-      items: billItems.map(item => ({
-        productId: item._id,
-        productName: item.productName,
-        weight: item.weight,
-        weightSIUnit: item.weightSIUnit,
-        quantity: item.minSelectableQuantity,
-        price: item.price,
-        totalPrice: item.minSelectableQuantity * item.price,
-      })),
-      totalPrice: calculateTotalPrice(),
+      billNumber: 'BILL-001',
+      customerName: 'John Doe',
+      customerPhone: '1234567890',
+      customerUser: 'User1',
+      date: new Date().toLocaleDateString(),
+      time: new Date().toLocaleTimeString(),
+      items: [
+        { productName: 'GLASS', quantity: 10, price: 25, totalPrice: 250 },
+        { productName: 'TEA CUP', quantity: 5, price: 12, totalPrice: 60 },
+        { productName: 'GOOD DAY', quantity: 1, price: 115, totalPrice: 115 },
+        { productName: 'SARAS RED MILK', quantity: 6, price: 32, totalPrice: 192 },
+        { productName: 'NAMKEEN', quantity: 1, price: 90, totalPrice: 90 },
+      ],
+      totalAmount: 707,
+      amountInWords: 'Seven Hundred Seven Only'
     };
+    
+    const config = {
+      companyName: 'ASHOK GENERAL STORE',
+      gstNumber: '08AEDPJ9090A1ZN',
+      companyAddress: 'KATI GHATI, MALVIYA NAGAR, ALWAR (RAJ.)',
+      phone: '9414641072',
+      email: 'email@gmail.com',
+      termsAndConditions: [
+        'Goods once sold not be taken back & no cash Refund.',
+        'All subjects to Alwar Jurisdiction Only.'
+      ],
+      footerNote: '!!! Thanks !!! Visit Again !!!\n**Free Home Delivery Available**'
+    };
+    generatePDF(billData, config);
+
+  }
+
+  // const handleSaveAndPrint = async () => {
+  //   setToastText('Saving and printing bill...');
+  //   setShowToast(true);
   
-    try {
-      const response = await axios.post('http://localhost:5001/api/bills', billData, {
-        responseType: 'blob', // Important for downloading binary data
-      });
+  //   const billNumber = `BILL-${Date.now()}`;
+  //   const billData = {
+  //     billNumber,
+  //     date: billDate,
+  //     customerName,
+  //     customerPhone,
+  //     customerAddress,
+  //     items: billItems.map(item => ({
+  //       productId: item._id,
+  //       productName: item.productName,
+  //       weight: item.weight,
+  //       weightSIUnit: item.weightSIUnit,
+  //       quantity: item.minSelectableQuantity,
+  //       price: item.price,
+  //       totalPrice: item.minSelectableQuantity * item.price,
+  //     })),
+  //     totalPrice: calculateTotalPrice(),
+  //   };
   
-      if (response.status === 201) {
-        const blob = new Blob([response.data], { type: 'application/pdf' });
-        const url = window.URL.createObjectURL(blob);
-        console.log(url);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${billNumber}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(url);
-  
-        closeConfirmPrintModal();
-        setShowToast(false);
-        setError(null);
-        window.print();
-      }
-    } catch (error) {
-      setToastText('Failed to save bill');
-      setShowToast(false);
-      setError(error.message); // Update to set the error message
-      console.error('Error saving bill:', error);
-    }
-  };
+  //   try {
+  //     // await axios.post('http://localhost:5001/api/bills', billData);
+  //     // closeConfirmPrintModal();
+  //     // setShowToast(false);
+  //     // setError(null);
+
+  //     const response = await axios.post('http://localhost:5001/api/bills', billData);
+
+
+  //     setShowToast(false);
+  //     setError(null);
+
+
+  //     }  catch (error) {
+  //     setToastText('Failed to save bill');
+  //     setShowToast(false);
+  //     setError(error.message); // Update to set the error message
+  //     console.error('Error saving bill:', error);
+  //   }
+  // };
   
 
   const calculateTotalPrice = () => {

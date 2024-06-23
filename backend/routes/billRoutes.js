@@ -1,7 +1,7 @@
 const express = require('express');
-const { saveBill } = require('../controllers/billController');
+const { saveBillAndGenerateInvoice } = require('../controllers/billController');
 const router = express.Router();
 
-router.post('/bills', saveBill);
+router.post('/bills', saveBillAndGenerateInvoice);
 
 module.exports = router;
