@@ -1,74 +1,72 @@
-import { jsPDF } from "jspdf";
+import { jsPDF } from 'jspdf';
 
-export const generatePDF = (billData, config) => {
-  const doc = new jsPDF({
-    orientation: 'portrait',
-    unit: 'in',
-    format: [7.5, 11] // 7.5 inches width and standard length
-  });
-
-  const pageWidth = doc.internal.pageSize.getWidth();
+export const generatePDFInvoice = (billData, config) => {
+  const doc = new jsPDF('p', 'mm', [80, 297]); // Roll paper size 80mm * 297mm
 
   // Header
-  doc.setFontSize(12).setFont("helvetica", "bold").text(config.companyName, pageWidth / 2, 0.5, { align: "center" });
-  doc.setFontSize(10).setFont("helvetica", "normal");
-  doc.text(config.companyAddress, pageWidth / 2, 0.7, { align: "center" });
-  doc.text(`GST No: ${config.gstNumber}`, pageWidth / 2, 0.9, { align: "center" });
-  doc.text(`Phone: ${config.phone}`, pageWidth / 2, 1.1, { align: "center" });
-  doc.text(`E-Mail: ${config.email}`, pageWidth / 2, 1.3, { align: "center" });
+  doc.setFontSize(10).setFont('helvetica', 'bold');
+  doc.text('GST INVOICE', 40, 5, { align: 'center' });
+  doc.setFontSize(12).setFont('helvetica', 'bold');
+  doc.text(config.companyDetails.name, 40, 10, { align: 'center' });
+  doc.setFontSize(8).setFont('helvetica', 'compressed');
+  doc.text(config.companyDetails.address, 40, 15, { align: 'center' });
+  doc.text(`Phone: ${config.companyDetails.phone}`, 40, 20, { align: 'center' });
+  doc.text(`E-Mail: ${config.companyDetails.email}`, 40, 25, { align: 'center' });
+  doc.text(`GSTIN: ${config.companyDetails.gstNumber}`, 40, 30, { align: 'center' });
 
   // Customer Details
-  doc.setFontSize(10).setFont("helvetica", "bold");
-  doc.text(`Customer: ${billData.customerName}`, 0.5, 1.7);
-  doc.text(`Mobile: ${billData.customerPhone}`, 0.5, 1.9);
-  doc.text(`User: ${billData.customerUser}`, 0.5, 2.1);
-
-  // Bill Details
-  doc.text(`Bill No: ${billData.billNumber}`, pageWidth - 2, 1.7);
-  doc.text(`Date: ${billData.date}`, pageWidth - 2, 1.9);
-  doc.text(`Time: ${billData.time}`, pageWidth - 2, 2.1);
+  doc.setFontSize(8).setFont('helvetica', 'bold');
+  doc.text(`Customer: ${billData.customerDetails.name}`, 5, 35);
+  doc.text(`Mobile: ${billData.customerDetails.mobile}`, 5, 40);
+  doc.text(`User: ${billData.customerDetails.user}`, 5, 45);
+  doc.text(`Bill No: ${billData.billDetails.number}`, 55, 35);
+  doc.text(`Date: ${billData.billDetails.date}`, 55, 40);
+  doc.text(`Time: ${billData.billDetails.time}`, 55, 45);
 
   // Table Header
-  doc.setFontSize(10).setFont("helvetica", "bold");
-  doc.text('S. No.', 0.5, 2.5);
-  doc.text('Description', 1.0, 2.5);
-  doc.text('Qty', 3.0, 2.5);
-  doc.text('RATE', 4.0, 2.5);
-  doc.text('Amt', 5.0, 2.5);
-  doc.setLineWidth(0.02);
-  doc.line(0.5, 2.6, pageWidth - 0.5, 2.6);
+  doc.setFontSize(8).setFont('helvetica', 'bold');
+  doc.text('S. No.', 5, 50);
+  doc.text('Description', 15, 50);
+  doc.text('Qty', 50, 50);
+  doc.text('RATE', 60, 50);
+  doc.text('Amt', 70, 50);
+  doc.setLineWidth(0.1);
+  doc.line(5, 52, 75, 52);
 
   // Table Rows
-  doc.setFontSize(10).setFont("helvetica", "normal");
-  let y = 2.8;
+  let y = 57;
   billData.items.forEach((item, index) => {
-    doc.text((index + 1).toString(), 0.5, y);
-    doc.text(item.productName, 1.0, y);
-    doc.text(item.quantity.toString(), 3.0, y);
-    doc.text(item.price.toString(), 4.0, y);
-    doc.text(item.totalPrice.toString(), 5.0, y);
-    y += 0.3;
+    doc.text(`${index + 1}`, 5, y);
+    doc.text(item.description, 15, y);
+    doc.text(item.quantity.toString(), 50, y);
+    doc.text(item.rate.toFixed(2), 60, y);
+    doc.text(item.amount.toFixed(2), 70, y);
+    y += 5;
   });
 
   // Total
-  doc.setLineWidth(0.02);
-  doc.line(0.5, y, pageWidth - 0.5, y);
-  doc.text(`Item Qty: ${billData.items.length}`, 0.5, y + 0.2);
-  doc.text(`Pls Pay Amount: ${billData.totalAmount}`, 5.0, y + 0.2);
+  doc.setLineWidth(0.1);
+  doc.line(5, y, 75, y);
+  doc.text(`Item Qty: ${billData.totals.totalQuantity}`, 5, y + 5);
+  doc.text(`Pls Pay Amount: ${billData.totals.totalAmount.toFixed(2)}`, 50, y + 5);
 
   // Amount in Words
-  doc.text(`Rs. ${billData.amountInWords}`, 0.5, y + 0.5);
+  doc.setFontSize(8).setFont('helvetica', 'bold');
+  doc.text(`Rs. ${billData.totals.amountInWords}`, 5, y + 10);
 
   // Terms and Conditions
-  doc.setFontSize(10).setFont("helvetica", "bold").text('Terms & Conditions:', 0.5, y + 0.8, { underline: true });
-  config.termsAndConditions.forEach((line, index) => {
-    doc.text(`${index + 1}. ${line}`, 0.5, y + 1.0 + (index * 0.2));
+  doc.setFontSize(8).setFont('helvetica', 'bold');
+  doc.text('Terms & Conditions:', 5, y + 15);
+  config.footer.terms.forEach((line, index) => {
+    doc.text(`${index + 1}. ${line}`, 5, y + 20 + (index * 5));
   });
 
   // Footer
-  doc.text(config.footerNote, pageWidth / 2, y + 1.5 + (config.termsAndConditions.length * 0.2), { align: 'center' });
+  doc.setFontSize(8).setFont('helvetica', 'bold');
+  doc.text(config.footer.thankYouMessage, 40, y + 30 + (config.footer.terms.length * 5), { align: 'center' });
 
   // Save the PDF
-  doc.save(`${billData.billNumber}.pdf`);
-  return doc;
+  const fileName = `${billData.billDetails.number}.pdf`;
+  doc.save(fileName);
+  return fileName;
 };

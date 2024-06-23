@@ -6,7 +6,7 @@ import ConfirmPrintModal from './ConfirmPrintModal';
 import Toast from './Toasts/Toast'; // Import the Toast component
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { generatePDF } from './GeneratePDFInvoice'; // Adjust the path as necessary
+import  {generatePDFInvoice}  from './GeneratePDFInvoice'; // Adjust the path as necessary
 
 const GenerateBill = () => {
   const [billItems, setBillItems] = useState([]);
@@ -148,39 +148,148 @@ const GenerateBill = () => {
   };
 
   const handleSaveAndPrint = async () => {
-    const billData = {
-      billNumber: 'BILL-001',
-      customerName: 'John Doe',
-      customerPhone: '1234567890',
-      customerUser: 'User1',
-      date: new Date().toLocaleDateString(),
-      time: new Date().toLocaleTimeString(),
-      items: [
-        { productName: 'GLASS', quantity: 10, price: 25, totalPrice: 250 },
-        { productName: 'TEA CUP', quantity: 5, price: 12, totalPrice: 60 },
-        { productName: 'GOOD DAY', quantity: 1, price: 115, totalPrice: 115 },
-        { productName: 'SARAS RED MILK', quantity: 6, price: 32, totalPrice: 192 },
-        { productName: 'NAMKEEN', quantity: 1, price: 90, totalPrice: 90 },
-      ],
-      totalAmount: 707,
-      amountInWords: 'Seven Hundred Seven Only'
-    };
-    
-    const config = {
-      companyName: 'ASHOK GENERAL STORE',
-      gstNumber: '08AEDPJ9090A1ZN',
-      companyAddress: 'KATI GHATI, MALVIYA NAGAR, ALWAR (RAJ.)',
-      phone: '9414641072',
-      email: 'email@gmail.com',
-      termsAndConditions: [
-        'Goods once sold not be taken back & no cash Refund.',
-        'All subjects to Alwar Jurisdiction Only.'
-      ],
-      footerNote: '!!! Thanks !!! Visit Again !!!\n**Free Home Delivery Available**'
-    };
-    generatePDF(billData, config);
 
-  }
+    const billData = {
+      customerDetails: {
+        name: 'A.P.S SCHOOL',
+        mobile: '',
+        user: 'Lenovo'
+      },
+      billDetails: {
+        number: 'A000298',
+        date: '13-06-2024',
+        time: '19:21'
+      },
+      items: [
+        { description: 'GLASS', quantity: 10, rate: 25, amount: 250 },
+        { description: 'TEA CUP 12/', quantity: 5, rate: 12, amount: 60 },
+        { description: 'GOOD DAY 10/', quantity: 1, rate: 115, amount: 115 },
+        { description: 'SARAS RED MILK 34/', quantity: 6, rate: 32, amount: 192 },
+        { description: 'NAMKEEN', quantity: 1, rate: 90, amount: 90 }
+      ],
+      totals: {
+        totalQuantity: 23,
+        totalAmount: 707,
+        amountInWords: 'Seven Hundred Seven Only'
+      }
+    };
+
+    const config = {
+      companyDetails: {
+        name: 'ASHOK GENERAL STORE',
+        address: 'KATI GHATI, MALVIYA NAGAR, ALWAR (RAJ.)',
+        phone: '9414641072',
+        email: 'email@gmail.com',
+        gstNumber: '08AEDPJ9090A1ZN'
+      },
+      footer: {
+        terms: [
+          'Goods once sold not be taken back & no cash Refund.',
+          'All subjects to Alwar Jurisdiction Only.'
+        ],
+        thankYouMessage: '!!! Thanks !!! Visit Again !!!\n**Free Home Delivery Available**'
+      }
+    };
+
+    try {
+      // await axios.post('http://localhost:5001/api/bills', billData);
+      const fileName = generatePDFInvoice(billData, config);
+      window.open(fileName, '_blank'); // Trigger the download of the PDF file
+    } catch (error) {
+      console.error('Error saving bill:', error);
+    }
+  };
+
+
+
+  // const handleSaveAndPrint = async () => {
+  //   const billData = {
+  //     customerDetails: {
+  //       name: 'A.P.S SCHOOL',
+  //       mobile: '',
+  //       user: 'Lenovo'
+  //     },
+  //     billDetails: {
+  //       number: 'A000298',
+  //       date: '13-06-2024',
+  //       time: '19:21'
+  //     },
+  //     items: [
+  //       { description: 'GLASS', quantity: 10, rate: 25, amount: 250 },
+  //       { description: 'TEA CUP 12/', quantity: 5, rate: 12, amount: 60 },
+  //       { description: 'GOOD DAY 10/', quantity: 1, rate: 115, amount: 115 },
+  //       { description: 'SARAS RED MILK 34/', quantity: 6, rate: 32, amount: 192 },
+  //       { description: 'NAMKEEN', quantity: 1, rate: 90, amount: 90 }
+  //     ],
+  //     totals: {
+  //       totalQuantity: 23,
+  //       totalAmount: 707,
+  //       amountInWords: 'Seven Hundred Seven Only'
+  //     }
+  //   };
+
+  //   const config = {
+  //     companyDetails: {
+  //       name: 'ASHOK GENERAL STORE',
+  //       address: 'KATI GHATI, MALVIYA NAGAR, ALWAR (RAJ.)',
+  //       phone: '9414641072',
+  //       email: 'email@gmail.com',
+  //       gstNumber: '08AEDPJ9090A1ZN'
+  //     },
+  //     footer: {
+  //       terms: [
+  //         'Goods once sold not be taken back & no cash Refund.',
+  //         'All subjects to Alwar Jurisdiction Only.'
+  //       ],
+  //       thankYouMessage: '!!! Thanks !!! Visit Again !!!\n**Free Home Delivery Available**'
+  //     }
+  //   };
+
+  //   try {
+  //     // await axios.post('http://localhost:5001/api/bills', billData);
+  //     const fileName = generatePDFInvoice(billData, config);
+  //     window.open(fileName, '_blank'); // Trigger the download of the PDF file
+  //   } catch (error) {
+  //     console.error('Error saving bill:', error);
+  //   }
+  // };
+
+
+
+  // const handleSaveAndPrint = async () => {
+  //   const billData = {
+  //     billNumber: 'BILL-001',
+  //     customerName: 'John Doe',
+  //     customerPhone: '1234567890',
+  //     customerUser: 'User1',
+  //     date: new Date().toLocaleDateString(),
+  //     time: new Date().toLocaleTimeString(),
+  //     items: [
+  //       { productName: 'GLASS', quantity: 10, price: 25, totalPrice: 250 },
+  //       { productName: 'TEA CUP', quantity: 5, price: 12, totalPrice: 60 },
+  //       { productName: 'GOOD DAY', quantity: 1, price: 115, totalPrice: 115 },
+  //       { productName: 'SARAS RED MILK', quantity: 6, price: 32, totalPrice: 192 },
+  //       { productName: 'NAMKEEN', quantity: 1, price: 90, totalPrice: 90 },
+  //     ],
+  //     totalAmount: 707,
+  //     amountInWords: 'Seven Hundred Seven Only'
+  //   };
+    
+  //   const config = {
+  //     companyName: 'ASHOK GENERAL STORE',
+  //     gstNumber: '08AEDPJ9090A1ZN',
+  //     companyAddress: 'KATI GHATI, MALVIYA NAGAR, ALWAR (RAJ.)',
+  //     phone: '9414641072',
+  //     email: 'email@gmail.com',
+  //     termsAndConditions: [
+  //       'Goods once sold not be taken back & no cash Refund.',
+  //       'All subjects to Alwar Jurisdiction Only.'
+  //     ],
+  //     footerNote: '!!! Thanks !!! Visit Again !!!\n**Free Home Delivery Available**'
+  //   };
+  //   generatePDFInvoice(billData, config);
+
+  // }
 
   // const handleSaveAndPrint = async () => {
   //   setToastText('Saving and printing bill...');
