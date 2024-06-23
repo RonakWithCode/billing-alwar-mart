@@ -12,8 +12,8 @@ const SearchModal = ({ onClose, onSelect }) => {
 
 
   useEffect(() => {
-    if (searchQuery) {
-      axios.get(`http://localhost:5001/api/add/products/search?query=${searchQuery}`)
+    if (searchQuery) { 
+      axios.get(`http://localhost:5001/api/quick-products/search?query=${searchQuery}`)
         .then((response) => setSearchResults(response.data))
         .catch((error) => console.error(error));
     }
@@ -49,18 +49,17 @@ const SearchModal = ({ onClose, onSelect }) => {
               <th className="px-4 py-2">Weight</th>
               <th className="px-4 py-2">Quantity</th>
               <th className="px-4 py-2">Price</th>
-              <th className="px-4 py-2">Discount</th>
             </tr>
           </thead>
           <tbody>
+            
             {searchResults.map((product, index) => (
-              <tr key={product.productId} 
-              className={selectedIndex === index ? 'bg-blue-500 text-white' : ''}>
+              <tr key={product._id}   
+                 className={selectedIndex === index ? 'bg-blue-500 text-white' : ''}>
                 <td className="border px-4 py-2">{product.productName}</td>
                 <td className="border px-4 py-2">{product.weight +" "+ product.weightSIUnit}</td>
                 <td className="border px-4 py-2">{product.minSelectableQuantity}</td>
                 <td className="border px-4 py-2">{product.price}</td>
-                <td className="border px-4 py-2">{product.discount}</td>
               </tr>
             ))}
           </tbody>

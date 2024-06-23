@@ -80,7 +80,7 @@ const GenerateBill = () => {
   const closeConfirmPrintModal = () => setIsConfirmPrintModalOpen(false);
 
   const addToBill = (product) => {
-    const existingProduct = billItems.find(item => item.productId === product.productId);
+    const existingProduct = billItems.find(item => item._id === product._id);
     if (!existingProduct) {
       setBillItems([...billItems, product]);
       closeSearchModal();
@@ -89,14 +89,14 @@ const GenerateBill = () => {
 
   const saveProduct = (product) => {
     const updatedBillItems = billItems.map(item =>
-      item.productId === product.productId ? product : item
+      item._id === product._id ? product : item
     );
     setBillItems(updatedBillItems);
     closeEditProductModal();
   };
 
   const deleteProduct = (productId) => {
-    const updatedBillItems = billItems.filter(item => item.productId !== productId);
+    const updatedBillItems = billItems.filter(item => item._id !== productId);
     setBillItems(updatedBillItems);
   };
 
@@ -119,14 +119,13 @@ const GenerateBill = () => {
       customerPhone,
       customerAddress,
       items: billItems.map(item => ({
-        productId: item.productId,
+        productId: item._id,
         productName: item.productName,
         weight: item.weight,
         weightSIUnit: item.weightSIUnit,
         quantity: item.minSelectableQuantity,
         price: item.price,
-        discount: item.discount,
-        totalPrice: item.minSelectableQuantity * item.price - (item.discount / 100) * (item.minSelectableQuantity * item.price),
+        totalPrice: item.minSelectableQuantity * item.price,
       })),
       totalPrice: calculateTotalPrice(),
     };
@@ -134,11 +133,11 @@ const GenerateBill = () => {
     try {
       // Save bill to backend
       const response = await axios.post('http://localhost:5001/api/bills', billData);
-      if (response.status === 201) {
+      // if (response.status === 201) {
         closeConfirmPrintModal();
         setShowToast(false);
         setError(null);
-      }
+      // }
     } catch (error) {
       setToastText('Failed to save bill');
       setShowToast(false);
@@ -147,11 +146,11 @@ const GenerateBill = () => {
     }
   };
 
+
   const handleSaveAndPrint = async () => {
     setToastText('Saving and printing bill...');
     setShowToast(true);
-
-    
+  
     const billNumber = `BILL-${Date.now()}`;
     const billData = {
       billNumber,
@@ -160,21 +159,34 @@ const GenerateBill = () => {
       customerPhone,
       customerAddress,
       items: billItems.map(item => ({
-        productId: item.productId,
+        productId: item._id,
         productName: item.productName,
         weight: item.weight,
         weightSIUnit: item.weightSIUnit,
         quantity: item.minSelectableQuantity,
         price: item.price,
-        discount: item.discount,
-        totalPrice: item.minSelectableQuantity * item.price - (item.discount / 100) * (item.minSelectableQuantity * item.price),
+        totalPrice: item.minSelectableQuantity * item.price,
       })),
       totalPrice: calculateTotalPrice(),
     };
-
+  
     try {
-      const response = await axios.post('http://localhost:5001/api/bills', billData);
+      const response = await axios.post('http://localhost:5001/api/bills', billData, {
+        responseType: 'blob', // Important for downloading binary data
+      });
+  
       if (response.status === 201) {
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        console.log(url);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${billNumber}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+  
         closeConfirmPrintModal();
         setShowToast(false);
         setError(null);
@@ -187,12 +199,12 @@ const GenerateBill = () => {
       console.error('Error saving bill:', error);
     }
   };
+  
 
   const calculateTotalPrice = () => {
     return billItems.reduce((total, item) => {
       const itemTotal = item.price * item.minSelectableQuantity;
-      const itemDiscount = item.discount ? (item.discount / 100) * itemTotal : 0;
-      return total + (itemTotal - itemDiscount);
+      return total + itemTotal;
     }, 0);
   };
 
@@ -261,7 +273,6 @@ const GenerateBill = () => {
             <th className="px-4 py-2">Weight</th>
             <th className="px-4 py-2">Quantity</th>
             <th className="px-4 py-2">Price</th>
-            <th className="px-4 py-2">Discount</th>
             <th className="px-4 py-2">Total price</th>
             <th className="px-4 py-2">Actions</th>
             <th className="px-4 py-2">Delete</th>
@@ -269,18 +280,17 @@ const GenerateBill = () => {
         </thead>
         <tbody>
           {billItems.map((item) => (
-            <tr key={item.productId}>
+            <tr key={item._id}>
               <td className="border px-4 py-2">{item.productName}</td>
               <td className="border px-4 py-2">{item.weight + " " + item.weightSIUnit}</td>
               <td className="border px-4 py-2">{item.minSelectableQuantity}</td>
               <td className="border px-4 py-2">{item.price}</td>
-              <td className="border px-4 py-2">{item.discount}</td>
               <td className="border px-4 py-2">{item.minSelectableQuantity * item.price}</td>
               <td className="border px-4 py-2">
                 <button onClick={() => openEditProductModal(item)} className="bg-yellow-500 text-white px-2 py-1 rounded">Edit</button>
               </td>
               <td className="border px-4 py-2">
-                <button onClick={() => deleteProduct(item.productId)} className=" text-white px-2 py-1 rounded">❌</button>
+                <button onClick={() => deleteProduct(item._id)} className=" text-white px-2 py-1 rounded">❌</button>
               </td>
             </tr>
           ))}
@@ -303,6 +313,9 @@ const GenerateBill = () => {
           onSaveAndPrint={handleSaveAndPrint}
         />
       )}
+{/* 
+<AddCustomer /> */}
+
     </div>
   );
 };

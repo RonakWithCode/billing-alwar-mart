@@ -1,22 +1,33 @@
 const QuickProduct = require('../models/quickProductModel');
 
+
+
 const addQuickProduct = async (req, res) => {
-  const { productName, productMRP, productPrice, productBarcode, brandName, weight, weightSIUnit, minSelectableQuantity } = req.body;
+  const { productName, mrp, price, Barcode, brand, weight, weightSIUnit, minSelectableQuantity } = req.body;
+  console.log(productName)
+  console.log(mrp)
+  console.log(price)
+  console.log(Barcode)
+  console.log(brand)
+  console.log(weight)
+  console.log(weightSIUnit)
+  console.log(minSelectableQuantity)
 
   // Validate input data
-  if (!productName || !productMRP || !productPrice || !productBarcode || !weight || !weightSIUnit || minSelectableQuantity == null) {
-    return res.status(400).json({ message: 'All fields are required except brandName' });
+  if (!productName || !mrp || !price || !Barcode || !weight || !weightSIUnit || minSelectableQuantity == null) {
+    // console.log("Product name")
+    return res.status(400).json({ message: 'All fields are required except brand' });
   }
 
   const newQuickProduct = new QuickProduct({
     productName,
-    productMRP,
-    productPrice,
-    productBarcode,
-    brandName,
+    mrp,
+    price,
+    Barcode,
+    brand,
     weight,
     weightSIUnit,
-    minSelectableQuantity // Add this line
+    minSelectableQuantity,
   });
 
   try {
@@ -27,13 +38,16 @@ const addQuickProduct = async (req, res) => {
   }
 };
 
+
+
 const searchQuickProducts = async (req, res) => {
   const { query } = req.query;
   try {
     const products = await QuickProduct.find({
       $or: [
         { productName: { $regex: query, $options: 'i' } },
-        { brandName: { $regex: query, $options: 'i' } }
+        { brand: { $regex: query, $options: 'i' } },
+        { Barcode: { $regex: query, $options: 'i' } }
       ]
     });
     res.json(products);

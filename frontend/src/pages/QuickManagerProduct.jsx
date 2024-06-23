@@ -156,16 +156,17 @@ const QuickManagerProduct = () => {
                 <tbody className="divide-y divide-gray-200 dark:divide-neutral-700">
                   {products
                     .filter((product) =>
-                      product.productName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                      product.brandName.toLowerCase().includes(searchQuery.toLowerCase())
+                      product.productName.toLowerCase().includes(searchQuery.toLowerCase()) 
+                    || product.brand.toLowerCase().includes(searchQuery.toLowerCase())
+                    || product.Barcode.toLowerCase().includes(searchQuery.toLowerCase())
                     )
                     .map((product) => (
                       <tr key={product._id} onClick={() => setSelectedProduct(product)} className={`cursor-pointer ${selectedProduct && selectedProduct._id === product._id ? 'bg-blue-500 text-white' : ''}`}>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">{product.productName}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm">{product.brandName}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">{product.brand}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm">{product.weight + " " + product.weightSIUnit}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm">{"₹" + product.productMRP}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm">{"₹" + product.productPrice}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">{"₹" + product.mrp}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">{"₹" + product.price}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm">{product.minSelectableQuantity}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                           <button onClick={() => setIsEditProductModalOpen(true)} className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-yellow-500 hover:text-yellow-700 disabled:opacity-50 disabled:pointer-events-none">Edit</button>
@@ -180,6 +181,7 @@ const QuickManagerProduct = () => {
         </div>
       </div>
       {isQuickAddModalOpen && <QuickAddProduct onClose={closeQuickAddModal} />}
+      
       {isEditProductModalOpen && selectedProduct && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-4 rounded w-1/2">
@@ -198,8 +200,8 @@ const QuickManagerProduct = () => {
                 <label>Brand Name (Optional):</label>
                 <input
                   type="text"
-                  value={selectedProduct.brandName}
-                  onChange={(e) => setSelectedProduct({ ...selectedProduct, brandName: e.target.value })}
+                  value={selectedProduct.brand}
+                  onChange={(e) => setSelectedProduct({ ...selectedProduct, brand: e.target.value })}
                   className="border p-2 rounded w-full"
                 />
               </div>
@@ -225,8 +227,8 @@ const QuickManagerProduct = () => {
                 <label>MRP:</label>
                 <input
                   type="number"
-                  value={selectedProduct.productMRP}
-                  onChange={(e) => setSelectedProduct({ ...selectedProduct, productMRP: e.target.value })}
+                  value={selectedProduct.mrp}
+                  onChange={(e) => setSelectedProduct({ ...selectedProduct, mrp: e.target.value })}
                   className="border p-2 rounded w-full"
                 />
               </div>
@@ -234,8 +236,8 @@ const QuickManagerProduct = () => {
                 <label>Price:</label>
                 <input
                   type="number"
-                  value={selectedProduct.productPrice}
-                  onChange={(e) => setSelectedProduct({ ...selectedProduct, productPrice: e.target.value })}
+                  value={selectedProduct.price}
+                  onChange={(e) => setSelectedProduct({ ...selectedProduct, price: e.target.value })}
                   className="border p-2 rounded w-full"
                 />
               </div>
@@ -243,8 +245,8 @@ const QuickManagerProduct = () => {
                 <label>Barcode:</label>
                 <input
                   type="text"
-                  value={selectedProduct.productBarcode}
-                  onChange={(e) => setSelectedProduct({ ...selectedProduct, productBarcode: e.target.value })}
+                  value={selectedProduct.Barcode}
+                  onChange={(e) => setSelectedProduct({ ...selectedProduct, Barcode: e.target.value })}
                   className="border p-2 rounded w-full"
                 />
               </div>

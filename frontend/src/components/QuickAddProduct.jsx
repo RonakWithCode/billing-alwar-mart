@@ -3,29 +3,28 @@ import axios from 'axios';
 
 const QuickAddProduct = ({ onClose }) => {
   const [productName, setProductName] = useState('');
-  const [productMRP, setProductMRP] = useState('');
-  const [productPrice, setProductPrice] = useState('');
-  const [productBarcode, setProductBarcode] = useState('');
-  const [brandName, setBrandName] = useState('');
-  const [weight, setWeight] = useState('');
+  const [mrp, setMrp] = useState(''); // Changed to match schema
+  const [price, setPrice] = useState(''); // Changed to match schema
+  const [Barcode, setBarcode] = useState(''); // Changed to match schema
+  const [brand, setBrand] = useState(''); // Changed to match schema
+  const [weight, setWeight] = useState(''); 
   const [weightSIUnit, setWeightSIUnit] = useState('');
-  const [minSelectableQuantity, setMinSelectableQuantity] = useState(''); // Add this line
+  const [minSelectableQuantity, setMinSelectableQuantity] = useState(''); // Changed to match schema
 
   const handleAddProduct = async () => {
     const productData = {
       productName,
-      productMRP,
-      productPrice,
-      productBarcode,
-      brandName,
+      mrp,
+      price,
+      Barcode,
+      brand,
       weight,
       weightSIUnit,
-      minSelectableQuantity // Add this line
+      minSelectableQuantity,
     };
 
     try {
       await axios.post('http://localhost:5001/api/quick-products', productData);
-      // const response = await axios.post('http://localhost:5001/api/quick-products', productData);
       onClose();
     } catch (error) {
       console.error('Error adding product:', error);
@@ -48,38 +47,38 @@ const QuickAddProduct = ({ onClose }) => {
             />
           </div>
           <div>
-            <label>Product MRP:</label>
+            <label>MRP:</label> {/* Changed label to match state */}
             <input
               type="number"
-              value={productMRP}
-              onChange={(e) => setProductMRP(e.target.value)}
+              value={mrp}
+              onChange={(e) => setMrp(e.target.value)}
               className="border p-2 rounded w-full"
             />
           </div>
           <div>
-            <label>Product Price:</label>
+            <label>Price:</label> {/* Changed label to match state */}
             <input
               type="number"
-              value={productPrice}
-              onChange={(e) => setProductPrice(e.target.value)}
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
               className="border p-2 rounded w-full"
             />
           </div>
           <div>
-            <label>Product Barcode:</label>
+            <label>Barcode:</label> {/* Changed label to match state */}
             <input
               type="text"
-              value={productBarcode}
-              onChange={(e) => setProductBarcode(e.target.value)}
+              value={Barcode}
+              onChange={(e) => setBarcode(e.target.value)}
               className="border p-2 rounded w-full"
             />
           </div>
           <div>
-            <label>Brand Name (Optional):</label>
+            <label>Brand (Optional):</label> {/* Changed label to match state */}
             <input
               type="text"
-              value={brandName}
-              onChange={(e) => setBrandName(e.target.value)}
+              value={brand}
+              onChange={(e) => setBrand(e.target.value)}
               className="border p-2 rounded w-full"
             />
           </div>
@@ -121,8 +120,3 @@ const QuickAddProduct = ({ onClose }) => {
 };
 
 export default QuickAddProduct;
-
-
-
-
-

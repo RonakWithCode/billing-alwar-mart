@@ -79,7 +79,7 @@ const AddProduct = () => {
     try {
 // http://localhost:5001/api/products\
 // axios.get(`http://localhost:5001/api/add/products/search?query=${searchQuery}`)
-      const response = await axios.post('http://localhost:5001/api/add/create', productData);
+      const response = await axios.post('http://localhost:5001/api/add/addproductbothquickandmain', productData);
       if (response.status === 201) {
         setProduct({
           isAvailable: true,
