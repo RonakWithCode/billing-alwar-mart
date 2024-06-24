@@ -21,7 +21,7 @@ const AddProduct = () => {
     weight: '',
     weightSIUnit: '',
     productLife: '',
-    productType: '',
+    productType: '',    
     productIsFoodItem: '',
     keywords: [],
     productImage: [],

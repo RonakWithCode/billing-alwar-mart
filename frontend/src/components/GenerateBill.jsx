@@ -148,57 +148,111 @@ const GenerateBill = () => {
   };
 
   const handleSaveAndPrint = async () => {
+   // Usage Example:
+const billData = {
+  customerDetails: {
+    name: 'A.P.S SCHOOL',
+    mobile: '9414641072',
+    user: 'Lenovo'
+  },
+  billDetails: {
+    number: 'A000298',
+    date: '13-06-2024',
+    time: '19:21'
+  },
+  items: [
+    { description: 'GLASS', quantity: 10, rate: 25.00, amount: 250.00 },
+    { description: 'TEA CUP 12/', quantity: 5, rate: 12.00, amount: 60.00 },
+    { description: 'GOOD DAY 10/', quantity: 1, rate: 115.00, amount: 115.00 },
+    { description: 'SARAS RED MILK 34/', quantity: 6, rate: 32.00, amount: 192.00 },
+    { description: 'NAMKEEN', quantity: 1, rate: 90.00, amount: 90.00 }
+  ],
+  totals: {
+    totalQuantity: 23,
+    totalAmount: 707.00,
+    amountInWords: 'Seven Hundred Seven Only'
+  }
+};
 
-    const billData = {
-      customerDetails: {
-        name: 'A.P.S SCHOOL',
-        mobile: '',
-        user: 'Lenovo'
-      },
-      billDetails: {
-        number: 'A000298',
-        date: '13-06-2024',
-        time: '19:21'
-      },
-      items: [
-        { description: 'GLASS', quantity: 10, rate: 25, amount: 250 },
-        { description: 'TEA CUP 12/', quantity: 5, rate: 12, amount: 60 },
-        { description: 'GOOD DAY 10/', quantity: 1, rate: 115, amount: 115 },
-        { description: 'SARAS RED MILK 34/', quantity: 6, rate: 32, amount: 192 },
-        { description: 'NAMKEEN', quantity: 1, rate: 90, amount: 90 }
-      ],
-      totals: {
-        totalQuantity: 23,
-        totalAmount: 707,
-        amountInWords: 'Seven Hundred Seven Only'
-      }
-    };
-
-    const config = {
-      companyDetails: {
-        name: 'ASHOK GENERAL STORE',
-        address: 'KATI GHATI, MALVIYA NAGAR, ALWAR (RAJ.)',
-        phone: '9414641072',
-        email: 'email@gmail.com',
-        gstNumber: '08AEDPJ9090A1ZN'
-      },
-      footer: {
-        terms: [
-          'Goods once sold not be taken back & no cash Refund.',
-          'All subjects to Alwar Jurisdiction Only.'
-        ],
-        thankYouMessage: '!!! Thanks !!! Visit Again !!!\n**Free Home Delivery Available**'
-      }
-    };
+const config = {
+  companyDetails: {
+    name: 'ASHOK GENERAL STORE',
+    address: 'KATI GHATI, MALVIYA NAGAR, ALWAR (RAJ.)',
+    phone: '9414641072',
+    email: 'email@gmail.com',
+    gstNumber: '08AEDPJ9090A1ZN'
+  },
+  footer: {
+    terms: [
+      'Goods once sold not be taken back & no cash Refund.',
+      'All subjects to Alwar Jurisdiction Only.'
+    ],
+    thankYouMessage: '!!! Thanks !!! Visit Again !!!\n**Free Home Delivery Available**'
+  }
+};
 
     try {
+generatePDFInvoice(billData, config);
+
       // await axios.post('http://localhost:5001/api/bills', billData);
-      const fileName = generatePDFInvoice(billData, config);
-      window.open(fileName, '_blank'); // Trigger the download of the PDF file
     } catch (error) {
       console.error('Error saving bill:', error);
     }
   };
+
+
+  // const handleSaveAndPrint = async () => {
+
+  //     const billData = {
+  //     customerDetails: {
+  //       name: 'A.P.S SCHOOL',
+  //       mobile: '',
+  //       user: 'Lenovo'
+  //     },
+  //     billDetails: {
+  //       number: 'A000298',
+  //       date: '13-06-2024',
+  //       time: '19:21'
+  //     },
+  //     items: [
+  //       { description: 'GLASS', quantity: 10, rate: 25, amount: 250 },
+  //       { description: 'TEA CUP 12/', quantity: 5, rate: 12, amount: 60 },
+  //       { description: 'GOOD DAY 10/', quantity: 1, rate: 115, amount: 115 },
+  //       { description: 'SARAS RED MILK 34/', quantity: 6, rate: 32, amount: 192 },
+  //       { description: 'NAMKEEN', quantity: 1, rate: 90, amount: 90 }
+  //     ],
+  //     totals: {
+  //       totalQuantity: 23,
+  //       totalAmount: 707,
+  //       amountInWords: 'Seven Hundred Seven Only'
+  //     }
+  //   };
+
+  //   const config = {
+  //     companyDetails: {
+  //       name: 'ASHOK GENERAL STORE',
+  //       address: 'KATI GHATI, MALVIYA NAGAR, ALWAR (RAJ.)',
+  //       phone: '9414641072',
+  //       email: 'email@gmail.com',
+  //       gstNumber: '08AEDPJ9090A1ZN'
+  //     },
+  //     footer: {
+  //       terms: [
+  //         'Goods once sold not be taken back & no cash Refund.',
+  //         'All subjects to Alwar Jurisdiction Only.'
+  //       ],
+  //       thankYouMessage: '!!! Thanks !!! Visit Again !!!\n**Free Home Delivery Available**'
+  //     }
+  //   };
+
+  //   try {
+  //     // await axios.post('http://localhost:5001/api/bills', billData);
+  //     const fileName = generatePDFInvoice(billData, config);
+  //     window.open(fileName, '_blank'); // Trigger the download of the PDF file
+  //   } catch (error) {
+  //     console.error('Error saving bill:', error);
+  //   }
+  // };
 
 
 
