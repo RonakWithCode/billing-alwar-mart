@@ -6,7 +6,6 @@ const router = express.Router();
 const upload = multer({
   storage: multer.memoryStorage(),
 });
-
 router.post('/upload', upload.single('file'), async (req, res) => {
   try {
     const file = req.file;
@@ -14,18 +13,23 @@ router.post('/upload', upload.single('file'), async (req, res) => {
       return res.status(400).json({ message: 'No file uploaded' });
     }
 
+    // Create a reference to the file in Firebase Storage
     const blob = bucket.file(`products/${file.originalname}`);
+    
+    // Create a stream to upload the file
     const blobStream = blob.createWriteStream({
       metadata: {
         contentType: file.mimetype,
       },
     });
 
+    // Handle stream errors
     blobStream.on('error', (err) => {
       console.error(err);
       res.status(500).json({ message: 'Failed to upload file' });
     });
 
+    // Handle stream finish
     blobStream.on('finish', async () => {
       try {
         await blob.makePublic();
@@ -37,6 +41,7 @@ router.post('/upload', upload.single('file'), async (req, res) => {
       }
     });
 
+    // End the stream and send the file buffer
     blobStream.end(file.buffer);
   } catch (error) {
     console.error(error);
@@ -45,3 +50,4 @@ router.post('/upload', upload.single('file'), async (req, res) => {
 });
 
 module.exports = router;
+

@@ -150,9 +150,10 @@ const addProductBothQuickAndMain = async (req, res) => {
       variations: product.variations,
       sponsorTypeModel: [],
       stockEntries: [],
+      SponsorHomeType: product.SponsorHomeType,
+      SponsorSerachType: product.SponsorSerachType,
+      SponsorRecommendationType: product.SponsorRecommendationType,
 
-
-      // Add any other fields you want to store in Firestore
     });
 
 
