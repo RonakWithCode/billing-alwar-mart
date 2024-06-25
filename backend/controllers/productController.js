@@ -24,53 +24,6 @@ const searchProducts = async (req, res) => {
   }
 };
 
-const addProduct = async (req, res) => {
-  try {
-    const productData = req.body;
-    const product = new Product(productData);
-
-    await product.save();
-
-
-    await db.collection('Product').doc(product.productId.toString()).set({
-      isAvailable: product.isAvailable,
-      productId: product.productId,
-      productName: product.productName,
-      productDescription: product.productDescription,
-      Brand: product.brand,
-      category: product.category,
-      subCategory: product.subCategory,
-      price: product.price,
-      mrp: product.mrp,
-      discount: product.discount,
-      stockCount: product.stockCount,
-      minSelectableQuantity: product.minSelectableQuantity,
-      MaxSelectableQuantity: product.maxSelectableQuantity,
-      SelectableQuantity: product.selectableQuantity,
-      weight: product.weight,
-      weightSIUnit: product.weightSIUnit,
-      productLife: product.productLife,
-      productType: product.productType,
-      productIsFoodItem: product.productIsFoodItem,
-      keywords: product.keywords,
-      ProductImage: product.productImage,
-      variations: product.variations,
-      sponsorTypeModel: [],
-      stockEntries: [],
-
-
-      // Add any other fields you want to store in Firestore
-    });
-
-
-
-  
-    res.status(201).json(product);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
 // const addProductBothQuickAndMain = async (req, res) => {
 //   try {
 //     const { productName, productMRP, productPrice, productBarcode, brandName, weight, weightSIUnit, minSelectableQuantity } = req.body;
@@ -100,6 +53,60 @@ const addProduct = async (req, res) => {
 // }
 
 
+const addProduct = async (req, res) => {
+  try {
+    const productData = req.body;
+    const product = new Product(productData);
+
+    await product.save();
+
+
+    // 25  -24 -3
+    await db.collection('Product').doc(product.productId.toString()).set({
+ 
+      available: product.isAvailable,
+      productId: product.productId,
+      productName: product.productName,
+      productDescription: product.productDescription,
+      brand: product.brand,
+      category: product.category,
+      subCategory: product.subCategory,
+      price: product.price,
+      mrp: product.mrp,
+      discount: product.discount,
+      stockCount: product.stockCount,
+      totalStock: product.stockCount,
+      minSelectableQuantity: product.minSelectableQuantity,
+      maxSelectableQuantity: product.maxSelectableQuantity,
+      selectableQuantity: product.selectableQuantity,
+      weight: product.weight,
+      weightSIUnit: product.weightSIUnit,
+      productLife: product.productLife,
+      productType: product.productType,
+      productIsFoodItem: product.productIsFoodItem,
+      keywords: product.keywords,
+      productImage: product.productImage,
+      variations: product.variations,
+      sponsorTypeModel: [],
+      stockEntries: [],
+
+      SponsorHomeType: product.SponsorHomeType,
+      SponsorSerachType: product.SponsorSerachType,
+      SponsorRecommendationType: product.SponsorRecommendationType,
+
+    });
+
+
+
+
+  
+    res.status(201).json(product);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+
 const addProductBothQuickAndMain = async (req, res) => {
   try {
     // const {
@@ -123,36 +130,41 @@ const addProductBothQuickAndMain = async (req, res) => {
 
     const product = new Product(MainproductData);
     await product.save();
-
+    // 25  -24 -3
+    console.log(product);
 
     await db.collection('Product').doc(product.productId.toString()).set({
-      isAvailable: product.isAvailable,
+ 
+      available: product.isAvailable,
       productId: product.productId,
       productName: product.productName,
       productDescription: product.productDescription,
-      Brand: product.brand,
+      brand: product.brand,
       category: product.category,
       subCategory: product.subCategory,
       price: product.price,
       mrp: product.mrp,
       discount: product.discount,
       stockCount: product.stockCount,
+      totalStock: product.stockCount,
       minSelectableQuantity: product.minSelectableQuantity,
-      MaxSelectableQuantity: product.maxSelectableQuantity,
-      SelectableQuantity: product.selectableQuantity,
+      maxSelectableQuantity: product.maxSelectableQuantity,
+      selectableQuantity: product.selectableQuantity,
       weight: product.weight,
       weightSIUnit: product.weightSIUnit,
       productLife: product.productLife,
       productType: product.productType,
       productIsFoodItem: product.productIsFoodItem,
       keywords: product.keywords,
-      ProductImage: product.productImage,
+      productImage: product.productImage,
       variations: product.variations,
       sponsorTypeModel: [],
       stockEntries: [],
 
+      SponsorHomeType: product.SponsorHomeType,
+      SponsorSerachType: product.SponsorSerachType,
+      SponsorRecommendationType: product.SponsorRecommendationType,
 
-      // Add any other fields you want to store in Firestore
     });
 
 

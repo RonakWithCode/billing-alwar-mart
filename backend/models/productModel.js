@@ -4,7 +4,7 @@ const productSchema = new mongoose.Schema({
   isAvailable: { type: Boolean, required: true },
   productId: { type: String, required: true },
   productName: { type: String, required: true },
-  productDescription: { type: String, required: true },
+  productDescription: { type: String},
   Barcode: { type: String },
   brand: { type: String, required: true },
   category: { type: String, required: true },
@@ -23,6 +23,9 @@ const productSchema = new mongoose.Schema({
   productIsFoodItem: { type: String, required: true },
   keywords: { type: [String], required: true },
   productImage: { type: [String], required: true },
+  SponsorHomeType: { type: String, required: true },
+  SponsorSerachType: { type: String, required: true },
+  SponsorRecommendationType: { type: String, required: true },
   variations: { type: [Object] },
 });
 
