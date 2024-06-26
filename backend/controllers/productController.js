@@ -161,9 +161,6 @@ const addProductBothQuickAndMain = async (req, res) => {
       sponsorTypeModel: [],
       stockEntries: [],
 
-      SponsorHomeType: product.SponsorHomeType,
-      SponsorSerachType: product.SponsorSerachType,
-      SponsorRecommendationType: product.SponsorRecommendationType,
 
     });
 

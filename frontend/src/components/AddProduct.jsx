@@ -51,9 +51,15 @@ const AddProduct = () => {
 
     const fetchCategories = async () => {
       try {
+<<<<<<< HEAD
         // const fetchCat =  axios.get('http://localhost:5001/api/categories').then((response) => setCategories(response.data));
 
         // 
+=======
+    // const fetchCat =  axios.get('http://localhost:5001/api/categories').then((response) => setCategories(response.data));
+
+    // 
+>>>>>>> 957ad3f31dc63587fc4425be0385eb37483b73e5
 
         const response = await axios.get('http://localhost:5001/api/categories');
         const CategoriesData = response.data.map((Category) => ({
@@ -100,7 +106,11 @@ const AddProduct = () => {
 
     fetchBrands();
     fetchCategories();
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 957ad3f31dc63587fc4425be0385eb37483b73e5
   }, []);
 
   const handleChange = (e) => {
@@ -342,6 +352,10 @@ const AddProduct = () => {
 
   // Start Sponsors
 
+<<<<<<< HEAD
+=======
+  const [isSponsor, setIsSponsor] = useState();
+>>>>>>> 957ad3f31dc63587fc4425be0385eb37483b73e5
 
   const SponsorHomeType = [
     'Home Screen None',
@@ -366,6 +380,7 @@ const AddProduct = () => {
   // End Sponsors
 
 
+<<<<<<< HEAD
   // Start si unit 
 
 
@@ -487,6 +502,11 @@ const AddProduct = () => {
   
     //  End Keyboard
 
+=======
+
+
+
+>>>>>>> 957ad3f31dc63587fc4425be0385eb37483b73e5
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Add Product</h1>
@@ -516,18 +536,29 @@ const AddProduct = () => {
           <input type="text" name="Barcode" value={product.Barcode} onChange={handleChange} onKeyPress={handleBarcodeKeyPress} className="border p-2 rounded w-full" />
         </div>
         <div>
+<<<<<<< HEAD
           <label>Brand:</label>
+=======
+        <label>Brand:</label>
+>>>>>>> 957ad3f31dc63587fc4425be0385eb37483b73e5
 
           <Select
             options={brands}
             classNamePrefix="custom-select"
             placeholder="Select brand..."
             isSearchable
+<<<<<<< HEAD
             onChange={(selectBrand) => {
               console.log(selectBrand);
               setProduct((prevProduct) => ({
                 ...prevProduct,
                 brand: selectBrand.value,
+=======
+            onChange={(selectBrand)=>{
+              setProduct((prevProduct) => ({
+               ...prevProduct,
+                brand: selectBrand.name,
+>>>>>>> 957ad3f31dc63587fc4425be0385eb37483b73e5
               }));
             }}
             name="brand"
@@ -549,7 +580,11 @@ const AddProduct = () => {
                   boxShadow: '0 0 0 1px #60A5FA',
                 },
               }),
+<<<<<<< HEAD
 
+=======
+              
+>>>>>>> 957ad3f31dc63587fc4425be0385eb37483b73e5
               menu: (base) => ({
                 ...base,
                 marginTop: '0rem',
@@ -574,8 +609,13 @@ const AddProduct = () => {
               }),
             }}
           />
+<<<<<<< HEAD
           <h3 onClick={() => setShowBrandModal(true)} className='text-blue-600 hover:text-blue-400 ml-2 text-xl hover:cursor-pointer' >add new Brand</h3>
 
+=======
+           <h3 onClick={() => setShowBrandModal(true)} className='text-blue-500 ml-2 text-xl hover:cursor-pointer' >add new Brand</h3>
+     
+>>>>>>> 957ad3f31dc63587fc4425be0385eb37483b73e5
         </div>
         <div>
           <label>Category:</label>
@@ -585,10 +625,17 @@ const AddProduct = () => {
             placeholder="Select Category..."
             isSearchable
             name="category"
+<<<<<<< HEAD
             onChange={(selectCategory) => {
               setProduct((prevProduct) => ({
                 ...prevProduct,
                 category: selectCategory.value,
+=======
+            onChange={(selectCategory)=>{
+              setProduct((prevProduct) => ({
+               ...prevProduct,
+                category: selectCategory.name,
+>>>>>>> 957ad3f31dc63587fc4425be0385eb37483b73e5
               }));
             }}
             styles={{
@@ -609,7 +656,11 @@ const AddProduct = () => {
                   boxShadow: '0 0 0 1px #60A5FA',
                 },
               }),
+<<<<<<< HEAD
 
+=======
+              
+>>>>>>> 957ad3f31dc63587fc4425be0385eb37483b73e5
               menu: (base) => ({
                 ...base,
                 marginTop: '0rem',
@@ -634,8 +685,22 @@ const AddProduct = () => {
               }),
             }}
           />
+<<<<<<< HEAD
           <h3 onClick={() => setShowCategoryModal(true)} className='text-blue-600 ml-2 text-xl hover:text-blue-400 hover:cursor-pointer' >add new Category</h3>
 
+=======
+
+
+          <div className="flex items-center">
+            <select name="category" value={product.category} onChange={handleChange} className="border p-2 rounded w-full">
+              <option value="">Select Category</option>
+              {categories.map((category) => (
+                <option key={category._id} value={category.name}>{category.name}</option>
+              ))}
+            </select>
+            <button type="button" onClick={() => setShowCategoryModal(true)} className="ml-2 p-2 bg-blue-500 text-white rounded">Add Category</button>
+          </div>
+>>>>>>> 957ad3f31dc63587fc4425be0385eb37483b73e5
         </div>
         <div>
           <label>Sub-Category:</label>
@@ -683,6 +748,7 @@ const AddProduct = () => {
             <label>Weight:</label>
             <input type="text" name="weight" value={product.weight} onChange={handleChange} className="border p-2 rounded w-full" />
           </div>
+<<<<<<< HEAD
           <div className="mb-4">
             <label className="block text-gray-700 mb-1">Weight SI Unit</label>
             <input
@@ -790,11 +856,29 @@ const AddProduct = () => {
             </select>
 
 
+=======
+          <div>
+            <label>Weight SI Unit:</label>
+            <input type="text" name="weightSIUnit" value={product.weightSIUnit} onChange={handleChange} className="border p-2 rounded w-full" />
+          </div>
+          <div>
+            <label>Product Life:</label>
+            <input type="text" name="productLife" value={product.productLife} onChange={handleChange} className="border p-2 rounded w-full" />
+          </div>
+          <div>
+            <label>Product Type:</label>
+            <input type="text" name="productType" value={product.productType} onChange={handleChange} className="border p-2 rounded w-full" />
+          </div>
+          <div>
+            <label>Product is Food Item:</label>
+            <input type="text" name="productIsFoodItem" value={product.productIsFoodItem} onChange={handleChange} className="border p-2 rounded w-full" />
+>>>>>>> 957ad3f31dc63587fc4425be0385eb37483b73e5
           </div>
           <div>
           </div>
 
         </div>
+<<<<<<< HEAD
         <div className="mb-4 mt-6">
               <label className="block text-gray-700 mb-1">Keyword</label>
               <div className="flex">
@@ -842,6 +926,11 @@ const AddProduct = () => {
      
      
      
+=======
+
+        <label>Keywords:</label>
+        <input type="text" name="keywords" value={product.keywords.join(', ')} onChange={(e) => setProduct({ ...product, keywords: e.target.value.split(',').map((keyword) => keyword.trim()) })} className="border p-2 rounded w-full" />
+>>>>>>> 957ad3f31dc63587fc4425be0385eb37483b73e5
         <div>
           <div {...getRootProps()} className="border-dashed border-4 border-gray-300 p-10 text-center cursor-pointer">
             <input {...getInputProps()} />
